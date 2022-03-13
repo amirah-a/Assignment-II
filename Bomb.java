@@ -11,7 +11,7 @@ public class Bomb extends GameObject {
     private Random random;
 
     public Bomb(JPanel p, int xPos, int yPos, Player player){
-        super(p, xPos, yPos, 80, 80);
+        super(p, xPos, yPos, 50, 50);
         
         this.player = player;
         exploding = false;
@@ -57,14 +57,15 @@ public class Bomb extends GameObject {
             return;
         x = x + dx;
         y = y + dy;
-        // if (collidesWithPlayer())
+        if (collidesWithPlayer())
             // play sound
-        
-        if (collidesWithPlayer() || y > panel.getHeight()){
-            setLocation();
             //  IF ITS MOVING DY BUT I UPDATE DX THEN IT MOVES DIAGONAL
             dy += 5;    // speed up alien when it is re-generated at top
-        }    
+        
+        if (collidesWithPlayer() || y > panel.getHeight())
+            setLocation();
+        
+        
     }
 
     public boolean collidesWithPlayer(){
