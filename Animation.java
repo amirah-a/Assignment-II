@@ -140,9 +140,4 @@ public class Animation {
             this.endTime = endTime;
         }
     }
-
-    // TODO fix width height1
-    public Rectangle2D.Double getBoundingRectangle() {
-        return new Rectangle2D.Double (x, y, width, height);
-    }
 }

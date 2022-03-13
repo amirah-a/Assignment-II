@@ -206,12 +206,11 @@ public class GameWindow extends JFrame
 		
 		Player.isWalking = true;
 		if (keyCode == KeyEvent.VK_LEFT) {
-			gamePanel.updatePlayer(1);
-			//gamePanel.drawGameEntities();
+			gamePanel.movePlayer(1);			//gamePanel.drawGameEntities();
 		}
 
 		if (keyCode == KeyEvent.VK_RIGHT) {
-			gamePanel.updatePlayer(2);
+			gamePanel.movePlayer(2);
 			//gamePanel.drawGameEntities();
 		}
 	}
@@ -224,13 +223,13 @@ public class GameWindow extends JFrame
 		Player.isWalking = false;
 		if (keyCode == KeyEvent.VK_LEFT) {
 			Player.sprite = Player.animationLB;
-			gamePanel.updatePlayer(0);
+			gamePanel.movePlayer(0);
 			//gamePanel.drawGameEntities();
 		}
 
 		if (keyCode == KeyEvent.VK_RIGHT) {
 			Player.sprite = Player.animationRB;
-			gamePanel.updatePlayer(0);
+			gamePanel.movePlayer(0);
 			//gamePanel.drawGameEntities();
 		}
 

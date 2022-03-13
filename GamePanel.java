@@ -13,6 +13,7 @@ public class GamePanel extends JPanel {
 
 	private Player player;
 	private Torch[] torches;
+	private Bomb bomb;
 	SoundManager soundManager;
 
 	private GameThread gameThread;
@@ -22,6 +23,7 @@ public class GamePanel extends JPanel {
 
 	public GamePanel () {
 		player = null;
+		bomb = null;
 		torches = new Torch[NUM_TORCHES];
 
 		soundManager = SoundManager.getInstance();
@@ -38,20 +40,16 @@ public class GamePanel extends JPanel {
 
 		torches[0] = new Torch(this, 10, 40);
 		torches[1] = new Torch(this, 750, 40);
+		bomb = new Bomb (this, 330, 210, player);
 	}
 
-	public void updatePlayer (int direction) {
+	public void movePlayer (int direction) {
 
 		if (player != null) {
 			player.move(direction);			
 		}
 
 	}
-
-
-	// public boolean isOnBat (int x, int y) {
-	// 	return bat.isOnBat(x, y);
-	// }
 
 
 	public void startGame() {				// initialise and start the game thread 
@@ -97,6 +95,9 @@ public class GamePanel extends JPanel {
 
 	public void gameUpdate () {
 		player.updateSprite();
+		bomb.move();
+		bomb.updateSprite();
+		
 		for (int i=0; i<NUM_TORCHES; i++)
 			torches[i].updateSprite();
 
@@ -116,13 +117,11 @@ public class GamePanel extends JPanel {
 		for (int i=0; i<NUM_TORCHES; i++)
 			torches[i].draw(imageContext);
 
-		
+		bomb.draw(imageContext);
 
 		Graphics2D g2 = (Graphics2D) getGraphics();	// get the graphics context for the panel
 		g2.drawImage(image, 0, 0, 800, 400, null);
 
-		g2.setColor(Color.BLACK);
-		g2.draw(player.getPlayer().getBoundingRectangle());
 
 		imageContext.dispose();
 		g2.dispose();

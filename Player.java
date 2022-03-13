@@ -1,8 +1,6 @@
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-import java.text.ParseException;
+
 
 import javax.swing.JPanel;
 import java.awt.Image;
@@ -130,9 +128,19 @@ public class Player {
         if (sprite == null)
               return false;
   
-        Rectangle2D player = sprite.getBoundingRectangle();
+        Rectangle2D player = getBoundingRectangle();
         return player.contains(x, y);
     }
 
+    public Rectangle2D.Double getBoundingRectangle() {
+        return new Rectangle2D.Double (x+20, y+15, width-35, height-30);
+    }
     
+    public int getWidth(){
+        return width;
+    }
+
+    public int getHeight(){
+        return height;
+    }
 }
