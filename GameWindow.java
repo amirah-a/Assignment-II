@@ -213,6 +213,20 @@ public class GameWindow extends JFrame
 			gamePanel.movePlayer(2);
 			//gamePanel.drawGameEntities();
 		}
+
+		if (keyCode == KeyEvent.VK_SPACE){
+			// Player.isShooting = true;
+            // Player.playerShoot.start();
+			// soundManager.playClip("player_attack", false);
+			try {
+                Thread.sleep(600);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            int x = Player.x; //+ Player.width;
+            int y = Player.y; //+ Player.height;
+            GamePanel.potions.add(new Potion(gamePanel, x+15, y+20));
+		}
 	}
 
 	public void keyReleased(KeyEvent e) {
@@ -231,6 +245,10 @@ public class GameWindow extends JFrame
 			Player.sprite = Player.animationRB;
 			gamePanel.movePlayer(0);
 			//gamePanel.drawGameEntities();
+		}
+
+		if (keyCode == KeyEvent.VK_SPACE) {
+			// GamePanel.isCasting = false;
 		}
 
 	}

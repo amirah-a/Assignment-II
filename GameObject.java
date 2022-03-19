@@ -18,8 +18,9 @@ public abstract class GameObject {
     public static Animation spriteA;
     public static Image spriteI;
     public static boolean isMoving;
+    public static Player player;
 
-    public GameObject(JPanel p, int xPos, int yPos, int width, int height){
+    public GameObject(JPanel p, int xPos, int yPos, int width, int height, Player player){
         panel = p;
         x = xPos;
         y = yPos;
@@ -28,11 +29,14 @@ public abstract class GameObject {
         
         spriteA = null;
         spriteI = null;
+        this.player = player;
     }
 
-    public abstract void loadAnimation();
+    public abstract void loadObject();
 
     public void updateSprite(){
+        if (spriteA == null)
+            return;
         spriteA.update();
     }
 

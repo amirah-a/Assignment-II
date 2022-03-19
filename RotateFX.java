@@ -34,7 +34,7 @@ public class RotateFX implements ImageFX {
 		angle = 5;				// set to 10 degrees
 		angleChange = 5;			// change to angle each time in update()
 
-		spriteImage = ImageManager.loadBufferedImage("images/CircularSaw.png");
+		spriteImage = ImageManager.loadBufferedImage("images/potion.png");
 	}
 
 
@@ -48,7 +48,7 @@ public class RotateFX implements ImageFX {
 		BufferedImage dest = new BufferedImage (width, height,
 							BufferedImage.TYPE_INT_ARGB);
 
-    		Graphics2D g2d = dest.createGraphics();
+    	Graphics2D g2d = dest.createGraphics();
 
    		AffineTransform origAT = g2d.getTransform(); 
 							// save original transform

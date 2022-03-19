@@ -7,10 +7,10 @@ import java.awt.Image;
 
 public class Player {
     private JPanel panel;
-    private int x;
-    private int y;
-    private int width;
-    private int height;
+    public static int x;
+    public static int y;
+    public static int width;
+    public static int height;
  
     private int dx;
     private int dy;
