@@ -17,7 +17,6 @@ public class Potion {
     private int height;
     private int dy;
     private Image sprite;
-    private static RotateFX rotateFX;
 
     public Potion(GamePanel p, int x, int y){
         panel = p;
@@ -33,7 +32,6 @@ public class Potion {
 
 
     public void move(){
-        rotateFX = new RotateFX(panel);
         y -= dy;
     }
 

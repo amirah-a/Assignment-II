@@ -5,6 +5,7 @@ import java.awt.Image;import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.awt.Graphics2D;
+import java.awt.Font;
 
 /**
    A component that displays all the game entities
@@ -22,7 +23,10 @@ public class GamePanel extends JPanel {
 	private Gold[] gold;
 	public static ArrayList <Potion> potions;
 	private Potion tempP;
-	RotateFX rotateFX;
+	private Image[] lives;
+	private Image life;
+	private int maxLives = 4;
+
 	SoundManager soundManager;
 
 	private GameThread gameThread;
@@ -30,19 +34,22 @@ public class GamePanel extends JPanel {
 	private BufferedImage image;
    	private Image backgroundImage;
 
+	private int score;
+
 	public GamePanel () {
 		player = null;
 		bombs = new Bomb[NUM_BOMBS];
 		gold = new Gold[NUM_GOLD];
 		torches = new Torch[NUM_TORCHES];
 		potions = new ArrayList<Potion>();
+		lives = new Image[5];
 		tempP = null;
+		life = null;
 
 		soundManager = SoundManager.getInstance();
 
       	backgroundImage = ImageManager.loadImage ("images/BG.png");
 		image = new BufferedImage (800, 400, BufferedImage.TYPE_INT_RGB);
-
 	}
 
 
@@ -62,8 +69,11 @@ public class GamePanel extends JPanel {
 			gold[i] = new Gold(this, count+100, 20, player);
 
 		}
-		rotateFX = new RotateFX(this);
-	
+		for(int j=0; j<5; j++){
+			lives[j] = ImageManager.loadImage("images/lives/heart" + j +".png");
+		}
+		score = 0;
+		life = lives[maxLives];
 	}
 
 	public void movePlayer (int direction) {
@@ -114,7 +124,6 @@ public class GamePanel extends JPanel {
 		soundManager.stopClip ("background");
 	}
 
-
 	public void gameUpdate () {
 		player.updateSprite();
 		
@@ -128,29 +137,31 @@ public class GamePanel extends JPanel {
 		}
 				
 
-		for (int x=0; x<NUM_GOLD; x++){
-			gold[x].move();
-		}
-
 		for (int i=0; i<NUM_TORCHES; i++)
 			torches[i].updateSprite();
 		
-			for (int x=0; x<NUM_BOMBS; x++){
-				bombs[x].move();
-				
-				// collides with potion
-				for(int j=0; j<potions.size(); j++){
+		for (int x=0; x<NUM_BOMBS; x++){
+			bombs[x].move();
+			
+			if(bombs[x].collidesWithPlayer()){
+				life = lives[maxLives-1];
+			}
 
-					if(bombs[x].collidesWithPotion(potions.get(j))){
-						bombs[x].setLocation();
-					}
+
+			// collides with potion
+			for(int j=0; j<potions.size(); j++){
+
+				if(bombs[x].collidesWithPotion(potions.get(j))){
+					bombs[x].setLocation();
 				}
+			}
 		}
 
 		for(int x=0; x<NUM_GOLD; x++){
-			if (gold[x].collidesWithPlayer()){
-				gold[x].setLocation();
-			}
+			gold[x].move();
+			// if (gold[x].collidesWithPlayer()){
+			// 	score = score + 10;
+			// }
 		}
 
 	}
@@ -160,22 +171,31 @@ public class GamePanel extends JPanel {
 
 		
 		Graphics2D imageContext = (Graphics2D) image.getGraphics();
+		imageContext.setColor(Color.WHITE);
 		player.draw(imageContext);
 
 		imageContext.drawImage(backgroundImage, 0, 0, null);	// draw the background image		
 		
 		// draw sprites, or update image animation/effects here
 		player.draw(imageContext);
+		
+		Font font = new Font ("Roboto", Font.BOLD, 20);
+		imageContext.setFont (font);
+		imageContext.drawString(String.valueOf(score), 390, 20);
+
+		imageContext.draw(player.getBoundingRectangle()); //test
+
 		for (int i=0; i<NUM_TORCHES; i++)
 			torches[i].draw(imageContext);
 
 		
 		for (int x=0; x<NUM_BOMBS; x++){
 			bombs[x].draw(imageContext);
+			imageContext.draw(bombs[x].getBoundingRectangle()); //test
 		}
 
-		for (int x=0; x<NUM_GOLD; x++){
-			gold[x].draw(imageContext);
+		for (int j=0; j<NUM_GOLD; j++){
+			gold[j].draw(imageContext);
 		}
 
 		if (potions != null) {
@@ -183,6 +203,7 @@ public class GamePanel extends JPanel {
 				potions.get(x).draw(imageContext);
 			}	
 		}
+		imageContext.drawImage(life, 374, 35, null);
 
 		Graphics2D g2 = (Graphics2D) getGraphics();	// get the graphics context for the panel
 		g2.drawImage(image, 0, 0, 800, 400, null);
@@ -192,5 +213,6 @@ public class GamePanel extends JPanel {
 		g2.dispose();
 
 	}
+
 
 }

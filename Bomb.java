@@ -84,16 +84,16 @@ public class Bomb {
     }
     public boolean collidesWithPotion(Potion p){
         Rectangle2D.Double myRect = getBoundingRectangle();
-        Rectangle2D.Double playerRect = p.getBoundingRectangle();
+        Rectangle2D.Double potionRect = p.getBoundingRectangle();
 
-        return myRect.intersects(playerRect);
+        return myRect.intersects(potionRect);
     }
 
     public boolean collidesWithGold(Gold g){
         Rectangle2D.Double myRect = getBoundingRectangle();
-        Rectangle2D.Double playerRect = g.getBoundingRectangle();
+        Rectangle2D.Double goldrRect = g.getBoundingRectangle();
 
-        return myRect.intersects(playerRect);
+        return myRect.intersects(goldrRect);
     }
 
 
@@ -107,5 +107,14 @@ public class Bomb {
 
     public void setIsHit(boolean hit){
         isHit = hit;
+    }
+
+    	
+	public int getX(){
+        return x;
+    }
+
+    public int getY(){
+        return y;
     }
 }

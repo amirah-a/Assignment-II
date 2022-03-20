@@ -2,6 +2,7 @@ import java.util.Random;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import javax.swing.JPanel;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 public class GrayScaleFX implements ImageFX {
@@ -17,6 +18,7 @@ public class GrayScaleFX implements ImageFX {
 
 	private BufferedImage spriteImage;		// image for sprite effect
 	private BufferedImage copy;			// copy of image
+	public static BufferedImage gray;
 
 	Graphics2D g2;
 
@@ -36,14 +38,14 @@ public class GrayScaleFX implements ImageFX {
 		originalImage = true;
 		grayImage = false;
 
-		spriteImage = ImageManager.loadBufferedImage("images/bomb/expl-6.png");
+		spriteImage = ImageManager.loadBufferedImage("images/");
 		copy = ImageManager.copyImage(spriteImage);		
 							//  make a copy of the original image
 
 	}
 
 
-	private int toGray (int pixel) {
+	private static int toGray (int pixel) {
 
   		int alpha, red, green, blue, gray;
 		int newPixel;
@@ -94,6 +96,23 @@ public class GrayScaleFX implements ImageFX {
 
 	}
 
+	public static BufferedImage toGrayScaleFX(BufferedImage colImage){
+		gray = ImageManager.copyImage(colImage);	
+
+		int width = gray.getWidth();
+		int height = gray.getHeight();
+		
+		int [] pixels = new int[width * height];
+		gray.getRGB(0, 0, width, height, pixels, 0, width);
+
+		for (int i=0; i<pixels.length; i++){
+			pixels[i] = toGray(pixels[i]);
+		}
+
+		gray.setRGB(0, 0, width, height, pixels, 0, width);
+
+		return gray;
+	}
 
 	public Rectangle2D.Double getBoundingRectangle() {
 		return new Rectangle2D.Double (x, y, WIDTH, HEIGHT);
