@@ -42,8 +42,6 @@ public class Gold {
     }
 
     public void setLocation() {
-        // x = 15;
-        // y = random.nextInt (panel.getHeight() - height);
         x = random.nextInt (panel.getWidth() - width);
         y = 15;
      }
@@ -60,11 +58,6 @@ public class Gold {
         x = x + dx;
         y = y + dy;
 
-    // if (collidesWithPlayer())
-    //     // play sound
-    //     //  IF ITS MOVING DY BUT I UPDATE DX THEN IT MOVES DIAGONAL
-    //     dy += 5;    // speed up alien when it is re-generated at top
-    
     if (y > panel.getHeight())
         setLocation();
         

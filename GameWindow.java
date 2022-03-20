@@ -4,10 +4,8 @@ import java.awt.event.*;		// need this to respond to GUI events
 	
 public class GameWindow extends JFrame 
 				implements ActionListener,
-					   KeyListener,
-					   MouseListener
-{
-	// declare instance variables for user interface objects
+					   	   KeyListener,
+					       MouseListener{
 
 	// declare labels 
     private JButton start, exit;
@@ -106,13 +104,6 @@ public class GameWindow extends JFrame
 			gamePanel.startGame();
 		}
 
-		// if (command.equals(exit.getText())) {
-		// 	gamePanel.endGame();
-		// }
-
-		// if (command.equals(restartB.getText()))
-		// 	gamePanel.restartGame();
-
 		if (command.equals(exit.getText()))
 			System.exit(0);
 
@@ -127,25 +118,18 @@ public class GameWindow extends JFrame
 		
 		Player.isWalking = true;
 		if (keyCode == KeyEvent.VK_LEFT) {
-			gamePanel.movePlayer(1);			//gamePanel.drawGameEntities();
+			gamePanel.movePlayer(1);			
 		}
 
 		if (keyCode == KeyEvent.VK_RIGHT) {
 			gamePanel.movePlayer(2);
-			//gamePanel.drawGameEntities();
+
 		}
 
-		if (keyCode == KeyEvent.VK_SPACE){
-			// Player.isShooting = true;
-            // Player.playerShoot.start();
-			
-			try {
-                Thread.sleep(600);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
-            int x = Player.x; //+ Player.width;
-            int y = Player.y; //+ Player.height;
+		if (keyCode == KeyEvent.VK_SPACE){		
+            int x = Player.getX(); 
+            int y = Player.getY(); 
+
             GamePanel.potions.add(new Potion(gamePanel, x+15, y+20));
 			soundManager.playClip("shoot", false);
 		}
@@ -158,13 +142,11 @@ public class GameWindow extends JFrame
 		if (keyCode == KeyEvent.VK_LEFT) {
 			Player.sprite = Player.animationLB;
 			gamePanel.movePlayer(0);
-			//gamePanel.drawGameEntities();
 		}
 
 		if (keyCode == KeyEvent.VK_RIGHT) {
 			Player.sprite = Player.animationRB;
 			gamePanel.movePlayer(0);
-			//gamePanel.drawGameEntities();
 		}
 
 	}

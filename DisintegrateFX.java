@@ -1,14 +1,11 @@
-import java.util.Random;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-import javax.swing.JPanel;
 import java.awt.image.BufferedImage;
 
 public class DisintegrateFX implements ImageFX {
 
 	private static final int WIDTH = 48;		// width of the image
 	private static final int HEIGHT = 48;		// height of the image
-	// private static final int YPOS = 48;		// vertical position of the image
 
 	private GamePanel panel;
 
@@ -31,8 +28,7 @@ public class DisintegrateFX implements ImageFX {
 		timeChange = 10;				// how to increment time in game loop
 
 		spriteImage = ImageManager.loadBufferedImage("images/bomb/bomb.png");
-		copy = ImageManager.copyImage(spriteImage);		
-							//  make a copy of the original image
+		copy = ImageManager.copyImage(spriteImage);	//  make a copy of the original image
 		active = true;
 	}
 
@@ -50,7 +46,7 @@ public class DisintegrateFX implements ImageFX {
     		im.getRGB(0, 0, imWidth, imHeight, pixels, 0, imWidth);
 
 		for (int i = 0; i < pixels.length; i = i + interval) {
-      			pixels[i] = 0;    // make transparent (or black if no alpha)
+      		pixels[i] = 0;    // make transparent (or black if no alpha)
 		}
   
     		im.setRGB(0, 0, imWidth, imHeight, pixels, 0, imWidth);

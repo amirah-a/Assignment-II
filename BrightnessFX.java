@@ -1,7 +1,5 @@
-import java.util.Random;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-import javax.swing.JPanel;
 import java.awt.image.BufferedImage;
 
 public class BrightnessFX implements ImageFX {
@@ -26,8 +24,7 @@ public class BrightnessFX implements ImageFX {
 	public BrightnessFX (GamePanel p) {
 		panel = p;
 
-		brightness = 0;				// range is -255 to 255; negative values darken the
-									// image and positive values brighten the image
+		brightness = 0;				// range is -255 to 255; negative values darken the - image and positive values brighten the image
  
 		brightnessChange = 5;			// increase of brightness in each update
 
@@ -99,29 +96,6 @@ public class BrightnessFX implements ImageFX {
     		copy.setRGB(0, 0, imWidth, imHeight, pixels, 0, imWidth);	
 
 		g2.drawImage(copy, x, y, WIDTH, HEIGHT, null);
-
-	}
-
-	public BufferedImage brighten (Graphics2D g2) {
-
-		copy = ImageManager.copyImage(spriteImage);		
-							// make copy of image for brightness effect
-
-		int imWidth = copy.getWidth();
-		int imHeight = copy.getHeight();
-
-    		int [] pixels = new int[imWidth * imHeight];
-    		copy.getRGB(0, 0, imWidth, imHeight, pixels, 0, imWidth);
-
-    		int alpha, red, green, blue;
-
-		for (int i=0; i<pixels.length; i++) {
-			pixels[i] = brighten(pixels[i]);
-		}
-
-    	copy.setRGB(0, 0, imWidth, imHeight, pixels, 0, imWidth);	
-
-		return copy;
 
 	}
 

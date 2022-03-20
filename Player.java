@@ -149,4 +149,12 @@ public class Player {
         Rectangle2D.Double bombRect = bomb.getBoundingRectangle();
         return player.intersects(bombRect);
     }
+
+    public static int getX(){
+        return x;
+    }
+
+    public static int getY(){
+        return y;
+    }
 }

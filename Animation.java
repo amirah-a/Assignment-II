@@ -1,11 +1,8 @@
 import java.awt.Image;
 import java.util.ArrayList;
-
 import javax.swing.JPanel;
-
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.geom.Rectangle2D;
+
 
 
 /**
@@ -112,13 +109,7 @@ public class Animation {
     }
 
     public void draw (Graphics2D g2) {				// draw the current frame on the graphics context
- 
-       //Graphics g = panel.getGraphics ();
-       //Graphics2D g2 = (Graphics2D) g;
-
        g2.drawImage(getImage(), x, y, 150, 150, null);
-  
-       //g2.dispose();
     }
 
     public int getNumFrames() {					// find out how many frames in animation

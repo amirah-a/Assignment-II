@@ -51,18 +51,5 @@ public class Torch {
     public void updateSprite(){
         torch.update();
     }
-
-    // public void move(int direction){
-
-    // }
-
-    // public boolean isOnPlayer (int x, int y) {
-    //     if (sprite == null)
-    //           return false;
-  
-    //     Rectangle2D player = sprite.getBoundingRectangle();
-    //     return player.contains(x, y);
-    // }
-
     
 }

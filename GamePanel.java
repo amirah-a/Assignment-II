@@ -106,11 +106,14 @@ public class GamePanel extends JPanel {
 		Thread thread;
 
 		if (gameThread == null) {
-			soundManager.playClip ("background", true);
+
+			
 			createGameEntities();
+			soundManager.playClip("start", false);			
 			gameThread = new GameThread (this);
-			thread = new Thread (gameThread);			
+			thread = new Thread (gameThread);
 			thread.start();
+			soundManager.playClip ("background", true);
 		}
 	}
 
@@ -120,7 +123,7 @@ public class GamePanel extends JPanel {
 		Thread thread;
 
 		if (gameThread == null || !gameThread.isRunning()) {
-			//soundManager.playClip ("background", true);
+			soundManager.playClip ("background", true);
 			createGameEntities();
 			gameThread = new GameThread (this);
 			thread = new Thread (gameThread);			
@@ -140,6 +143,35 @@ public class GamePanel extends JPanel {
 		gameThread.endGame();
 		soundManager.stopClip ("background");
 	}
+
+	public void gameOver() {
+
+		Graphics2D imageContext = (Graphics2D) image.getGraphics();
+		
+		soundManager.stopClip("background");
+		soundManager.playClip("over", false);
+		imageContext.drawImage(backgroundImage, 0, 0 , null);
+		Font f = new Font ("Roboto", Font.BOLD, 48);
+      	imageContext.setFont (f);
+      	imageContext.setColor(Color.RED);
+		imageContext.drawString("GAME OVER", 270, 215);
+		
+		player.draw(imageContext);
+		
+		Font font = new Font ("Roboto", Font.BOLD, 20);
+		imageContext.setColor(Color.WHITE);
+		imageContext.setFont (font);
+		imageContext.drawString(String.valueOf(score), 390, 20);
+		
+		imageContext.drawImage(lives[currLife], 374, 35, null);
+
+		Graphics2D g2 = (Graphics2D) getGraphics();
+		g2.drawImage(image, 0, 0, 800, 400, null);
+
+		imageContext.dispose();
+		g2.dispose();
+	}
+
 
 	public void gameUpdate () {
 		player.updateSprite();
@@ -196,11 +228,9 @@ public class GamePanel extends JPanel {
 
 			}
 
-
 			// collides with potion
 			for(int j=0; j<potions.size(); j++){
 				if(bombs[x].collidesWithPotion(potions.get(j))){
-					// sound clip?
 
 					disintegrate = true;
 					bombFX.setXY(potions.get(j).getX(), potions.get(j).getY());
@@ -280,35 +310,5 @@ public class GamePanel extends JPanel {
 		g2.dispose();
 
 	}
-
-
-	public void gameOver() {
-
-		Graphics2D imageContext = (Graphics2D) image.getGraphics();
-		
-		soundManager.stopClip("background");
-		soundManager.playClip("over", false);
-		imageContext.drawImage(backgroundImage, 0, 0 , null);
-		Font f = new Font ("Roboto", Font.BOLD, 48);
-      	imageContext.setFont (f);
-      	imageContext.setColor(Color.RED);
-		imageContext.drawString("GAME OVER", 270, 215);
-		
-		player.draw(imageContext);
-		
-		Font font = new Font ("Roboto", Font.BOLD, 20);
-		imageContext.setColor(Color.WHITE);
-		imageContext.setFont (font);
-		imageContext.drawString(String.valueOf(score), 390, 20);
-		
-		imageContext.drawImage(lives[currLife], 374, 35, null);
-
-		Graphics2D g2 = (Graphics2D) getGraphics();
-		g2.drawImage(image, 0, 0, 800, 400, null);
-
-		imageContext.dispose();
-		g2.dispose();
-	}
-
 
 }
