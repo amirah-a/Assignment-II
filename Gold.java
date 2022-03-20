@@ -65,7 +65,7 @@ public class Gold {
     //     //  IF ITS MOVING DY BUT I UPDATE DX THEN IT MOVES DIAGONAL
     //     dy += 5;    // speed up alien when it is re-generated at top
     
-    if (collidesWithPlayer() || y > panel.getHeight())
+    if (y > panel.getHeight())
         setLocation();
         
     }

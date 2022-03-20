@@ -133,7 +133,7 @@ public class Player {
     }
 
     public Rectangle2D.Double getBoundingRectangle() {
-        return new Rectangle2D.Double (x+20, y+15, width-35, height-30);
+        return new Rectangle2D.Double (x, y, width, height);
     }
     
     public int getWidth(){
@@ -142,5 +142,11 @@ public class Player {
 
     public int getHeight(){
         return height;
+    }
+
+    public boolean collidesWithBomb(Bomb bomb){
+        Rectangle2D.Double player = getBoundingRectangle();
+        Rectangle2D.Double bombRect = bomb.getBoundingRectangle();
+        return player.intersects(bombRect);
     }
 }

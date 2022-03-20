@@ -66,12 +66,12 @@ public class Bomb {
         x = x + dx;
         y = y + dy;
 
-    if (collidesWithPlayer())
-        // play sound
-        //  IF ITS MOVING DY BUT I UPDATE DX THEN IT MOVES DIAGONAL
-        dy += 1;    // speed up alien when it is re-generated at top
+    // if (collidesWithPlayer())
+    //     // play sound
+    //     //  IF ITS MOVING DY BUT I UPDATE DX THEN IT MOVES DIAGONAL
+    //     dy += 1;    // speed up alien when it is re-generated at top
     
-    if (collidesWithPlayer()  || y > panel.getHeight())
+    if (y > panel.getHeight())
         setLocation();
         
     }
@@ -116,5 +116,9 @@ public class Bomb {
 
     public int getY(){
         return y;
+    }
+
+    public void increaseDY(){
+        dy += 1;
     }
 }

@@ -27,6 +27,8 @@ public class GamePanel extends JPanel {
 	private Image life;
 	private int maxLives = 4;
 
+	private int currLife;
+
 	SoundManager soundManager;
 
 	private GameThread gameThread;
@@ -45,6 +47,8 @@ public class GamePanel extends JPanel {
 		lives = new Image[5];
 		tempP = null;
 		life = null;
+
+		currLife = maxLives;
 
 		soundManager = SoundManager.getInstance();
 
@@ -143,8 +147,12 @@ public class GamePanel extends JPanel {
 		for (int x=0; x<NUM_BOMBS; x++){
 			bombs[x].move();
 			
-			if(bombs[x].collidesWithPlayer()){
-				life = lives[maxLives-1];
+			if(player.collidesWithBomb(bombs[x])){
+				bombs[x].setLocation();
+				bombs[x].increaseDY();
+				if(currLife > 0)
+					currLife--;
+				//life = lives[maxLives-1]; this not making any sense dummy
 			}
 
 
@@ -159,9 +167,10 @@ public class GamePanel extends JPanel {
 
 		for(int x=0; x<NUM_GOLD; x++){
 			gold[x].move();
-			// if (gold[x].collidesWithPlayer()){
-			// 	score = score + 10;
-			// }
+			if (gold[x].collidesWithPlayer()){
+				gold[x].setLocation();
+				score = score + 10;
+			}
 		}
 
 	}
@@ -203,7 +212,7 @@ public class GamePanel extends JPanel {
 				potions.get(x).draw(imageContext);
 			}	
 		}
-		imageContext.drawImage(life, 374, 35, null);
+		imageContext.drawImage(lives[currLife], 374, 35, null);
 
 		Graphics2D g2 = (Graphics2D) getGraphics();	// get the graphics context for the panel
 		g2.drawImage(image, 0, 0, 800, 400, null);
