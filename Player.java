@@ -133,7 +133,7 @@ public class Player {
     }
 
     public Rectangle2D.Double getBoundingRectangle() {
-        return new Rectangle2D.Double (x, y, width, height);
+        return new Rectangle2D.Double (x+20, y+15, width-35, height-30);
     }
     
     public int getWidth(){

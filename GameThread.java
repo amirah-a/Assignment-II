@@ -57,8 +57,17 @@ public class GameThread implements Runnable {
 				gameRender();
 				Thread.sleep (50);	
 			}
+
+			if(!isRunning){
+				gamePanel.gameOver();
+			}
 		}
 		catch(InterruptedException e) {}
 	}
+
+
+    public void setIsRunning(boolean b) {
+		this.isRunning = b;
+    }
 
 }

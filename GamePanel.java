@@ -27,6 +27,11 @@ public class GamePanel extends JPanel {
 	private Image life;
 	private int maxLives = 4;
 
+	private DisintegrateFX bombFX;
+	private BrightnessFX goldFX;
+
+	private boolean bright, disintegrate;
+
 	private int currLife;
 
 	SoundManager soundManager;
@@ -36,7 +41,7 @@ public class GamePanel extends JPanel {
 	private BufferedImage image;
    	private Image backgroundImage;
 
-	private int score;
+	private static int score;
 
 	public GamePanel () {
 		player = null;
@@ -65,9 +70,11 @@ public class GamePanel extends JPanel {
 		torches[1] = new Torch(this, 750, 40);	
 
 		int count = 100;
-		for (int i=0; i<NUM_BOMBS; i++)
-			bombs[i] = new Bomb(this, count+50, 10, player);
-
+		for (int i=0; i<NUM_BOMBS; i++){
+			bombs[i] = new Bomb(this, count, 10, player);
+			count+=50;
+		}
+			
 		count = 150;
 		for (int i=0; i<NUM_GOLD; i++){
 			gold[i] = new Gold(this, count+100, 20, player);
@@ -78,6 +85,12 @@ public class GamePanel extends JPanel {
 		}
 		score = 0;
 		life = lives[maxLives];
+
+		goldFX = new BrightnessFX(this);
+		bright = false;
+
+		bombFX = new DisintegrateFX(this);
+		disintegrate = false;
 	}
 
 	public void movePlayer (int direction) {
@@ -93,7 +106,7 @@ public class GamePanel extends JPanel {
 		Thread thread;
 
 		if (gameThread == null) {
-			//soundManager.playClip ("background", true);
+			soundManager.playClip ("background", true);
 			createGameEntities();
 			gameThread = new GameThread (this);
 			thread = new Thread (gameThread);			
@@ -131,6 +144,14 @@ public class GamePanel extends JPanel {
 	public void gameUpdate () {
 		player.updateSprite();
 		
+		goldFX.update();
+		if(!goldFX.isActive())
+			bright = false;
+
+		bombFX.update();
+		if(!bombFX.isActive())
+			disintegrate = false; 
+
 		for(int i=0; i<potions.size(); i++){
 			tempP = potions.get(i);
 			tempP.move();
@@ -148,18 +169,27 @@ public class GamePanel extends JPanel {
 			bombs[x].move();
 			
 			if(player.collidesWithBomb(bombs[x])){
+
+				if (currLife  <= 1){
+					soundManager.playClip("over", false);
+					gameThread.setIsRunning(false);
+				}
+				soundManager.playClip("explosion", false);
 				bombs[x].setLocation();
 				bombs[x].increaseDY();
 				if(currLife > 0)
 					currLife--;
-				//life = lives[maxLives-1]; this not making any sense dummy
 			}
 
 
 			// collides with potion
 			for(int j=0; j<potions.size(); j++){
-
 				if(bombs[x].collidesWithPotion(potions.get(j))){
+					// sound clip?
+
+					disintegrate = true;
+					bombFX.setXY(potions.get(j).getX(), potions.get(j).getY());
+					
 					bombs[x].setLocation();
 				}
 			}
@@ -168,6 +198,11 @@ public class GamePanel extends JPanel {
 		for(int x=0; x<NUM_GOLD; x++){
 			gold[x].move();
 			if (gold[x].collidesWithPlayer()){
+				soundManager.playClip("collect", false);
+				
+				bright = true;
+				goldFX.setXY(gold[x].getX(), gold[x].getY());
+				
 				gold[x].setLocation();
 				score = score + 10;
 			}
@@ -187,12 +222,16 @@ public class GamePanel extends JPanel {
 		
 		// draw sprites, or update image animation/effects here
 		player.draw(imageContext);
+
+		if(bright)
+			goldFX.draw(imageContext);
 		
+		if(disintegrate)
+			bombFX.draw(imageContext);
+
 		Font font = new Font ("Roboto", Font.BOLD, 20);
 		imageContext.setFont (font);
 		imageContext.drawString(String.valueOf(score), 390, 20);
-
-		imageContext.draw(player.getBoundingRectangle()); //test
 
 		for (int i=0; i<NUM_TORCHES; i++)
 			torches[i].draw(imageContext);
@@ -200,7 +239,6 @@ public class GamePanel extends JPanel {
 		
 		for (int x=0; x<NUM_BOMBS; x++){
 			bombs[x].draw(imageContext);
-			imageContext.draw(bombs[x].getBoundingRectangle()); //test
 		}
 
 		for (int j=0; j<NUM_GOLD; j++){
@@ -221,6 +259,33 @@ public class GamePanel extends JPanel {
 		imageContext.dispose();
 		g2.dispose();
 
+	}
+
+
+	public void gameOver() {
+
+		Graphics2D imageContext = (Graphics2D) image.getGraphics();
+		
+		imageContext.drawImage(backgroundImage, 0, 0 , null);
+		Font f = new Font ("Roboto", Font.BOLD, 48);
+      	imageContext.setFont (f);
+      	imageContext.setColor(Color.RED);
+		imageContext.drawString("GAME OVER", 270, 215);
+		
+		player.draw(imageContext);
+		
+		Font font = new Font ("Roboto", Font.BOLD, 20);
+		imageContext.setColor(Color.WHITE);
+		imageContext.setFont (font);
+		imageContext.drawString(String.valueOf(score), 390, 20);
+		
+		imageContext.drawImage(lives[currLife], 374, 35, null);
+
+		Graphics2D g2 = (Graphics2D) getGraphics();
+		g2.drawImage(image, 0, 0, 800, 400, null);
+
+		imageContext.dispose();
+		g2.dispose();
 	}
 
 

@@ -11,14 +11,23 @@ public class SoundManager {				// a Singleton class
 	private SoundManager () {
 		clips = new HashMap<String, Clip>();
 
-		Clip clip = loadClip("sounds/background.wav");	// played from start of the game
+		Clip clip = loadClip("sounds/background.wav");
 		clips.put("background", clip);
 
-		clip = loadClip("sounds/hitSound.wav");	// played when the bat hits an alien
-		clips.put("hit", clip);
+		clip = loadClip("sounds/explosion.wav");	
+		clips.put("explosion", clip);
 
-		clip = loadClip("sounds/appearSound.wav");	// played when an alien is regenerated at the top of the JPanel
-		clips.put("appear", clip);
+		clip = loadClip("sounds/collect.wav");	
+		clips.put("collect", clip);
+
+		clip = loadClip("sounds/shoot.wav");	
+		clips.put("shoot", clip);
+
+		clip = loadClip("sounds/start.wav");	
+		clips.put("start", clip);
+
+		clip = loadClip("sounds/gameOver.wav");	
+		clips.put("over", clip);
 	}
 
 

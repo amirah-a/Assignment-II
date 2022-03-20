@@ -80,5 +80,13 @@ public class Gold {
     public Rectangle2D.Double getBoundingRectangle() {
         return new Rectangle2D.Double (x, y, width, height);
     }
+
+    public int getX(){
+        return x;
+    }
+
+    public int getY(){
+        return y;
+    }
     
 }

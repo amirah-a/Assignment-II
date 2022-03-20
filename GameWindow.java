@@ -10,40 +10,27 @@ public class GameWindow extends JFrame
 	// declare instance variables for user interface objects
 
 	// declare labels 
-    private JLabel points, lives;
-    private JTextField pointsTF, livesTF;
     private JButton start, exit;
-    private JPanel infoPanel, buttonPanel;
+    private JPanel buttonPanel;
 
 	private Container c;
 
 	private JPanel mainPanel;
 	private GamePanel gamePanel;
+	private SoundManager soundManager;
 
 	@SuppressWarnings({"unchecked"})
 	public GameWindow() {
  
-		setTitle("Cyclops Crunch");
-		setSize(1000, 600);
+		setTitle("The Mines");
+		setSize(1000, 480);
 		setLocationRelativeTo(null);
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
-
-
-		// create user interface objects
-
-		points = new JLabel("Points Scored: ");
-		points.setHorizontalAlignment(JLabel.CENTER);
-		lives = new JLabel("Lives: ");
-		lives.setHorizontalAlignment(JLabel.CENTER);
-		pointsTF = new JTextField(15);
-		livesTF = new JTextField(15);
-		pointsTF.setEditable(false);
-		livesTF.setEditable(false);
-		pointsTF.setBackground(Color.LIGHT_GRAY);
-		livesTF.setBackground(Color.LIGHT_GRAY);
 		
+		soundManager = SoundManager.getInstance();
+
 		// set up buttons
 		start = new JButton("Start Game");
 		exit = new JButton("Exit Game");
@@ -61,25 +48,12 @@ public class GameWindow extends JFrame
 		// create the gamePanel for game entities
 
 		gamePanel = new GamePanel();
-        	gamePanel.setPreferredSize(new Dimension(800, 400));
+        gamePanel.setPreferredSize(new Dimension(800, 400));
 
 		// create infoPanel
 
 		JPanel infoPanel = new JPanel();
 		gridLayout = new GridLayout(3, 2);
-		infoPanel.setLayout(gridLayout);
-		infoPanel.setBackground(Color.ORANGE);
-
-		// add user interface objects to infoPanel
-	
-		infoPanel = new JPanel();
-		infoPanel.setLayout(new GridLayout(2,2));
-		
-		infoPanel.add(points);
-		infoPanel.add(lives);
-		infoPanel.add(pointsTF);
-		infoPanel.add(livesTF);
-
 		
 		// create button panel
 		buttonPanel = new JPanel();
@@ -92,8 +66,6 @@ public class GameWindow extends JFrame
 		// create mainPanel and add subpanels 
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new FlowLayout());
-
-		mainPanel.add(infoPanel);
 		mainPanel.add(gamePanel);
 		mainPanel.add(buttonPanel);
 		mainPanel.setBackground(new Color(255,195,0));
@@ -101,7 +73,6 @@ public class GameWindow extends JFrame
 		
 		// add sub-panels with GUI objects to mainPanel and set its colour
 
-		mainPanel.add(infoPanel);
 		mainPanel.add(gamePanel);
 		mainPanel.add(buttonPanel);
 		mainPanel.setBackground(Color.PINK);
@@ -167,7 +138,7 @@ public class GameWindow extends JFrame
 		if (keyCode == KeyEvent.VK_SPACE){
 			// Player.isShooting = true;
             // Player.playerShoot.start();
-			// soundManager.playClip("player_attack", false);
+			
 			try {
                 Thread.sleep(600);
             } catch (InterruptedException e1) {
@@ -176,6 +147,7 @@ public class GameWindow extends JFrame
             int x = Player.x; //+ Player.width;
             int y = Player.y; //+ Player.height;
             GamePanel.potions.add(new Potion(gamePanel, x+15, y+20));
+			soundManager.playClip("shoot", false);
 		}
 	}
 
@@ -193,10 +165,6 @@ public class GameWindow extends JFrame
 			Player.sprite = Player.animationRB;
 			gamePanel.movePlayer(0);
 			//gamePanel.drawGameEntities();
-		}
-
-		if (keyCode == KeyEvent.VK_SPACE) {
-			// GamePanel.isCasting = false;
 		}
 
 	}

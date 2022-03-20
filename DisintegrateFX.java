@@ -6,9 +6,9 @@ import java.awt.image.BufferedImage;
 
 public class DisintegrateFX implements ImageFX {
 
-	private static final int WIDTH = 120;		// width of the image
-	private static final int HEIGHT = 120;		// height of the image
-	private static final int YPOS = 250;		// vertical position of the image
+	private static final int WIDTH = 48;		// width of the image
+	private static final int HEIGHT = 48;		// height of the image
+	// private static final int YPOS = 48;		// vertical position of the image
 
 	private GamePanel panel;
 
@@ -17,6 +17,7 @@ public class DisintegrateFX implements ImageFX {
 
 	private BufferedImage spriteImage;		// image for sprite effect
 	private BufferedImage copy;			// copy of image
+	private boolean active;	
 
 	Graphics2D g2;
 
@@ -26,19 +27,19 @@ public class DisintegrateFX implements ImageFX {
 	public DisintegrateFX (GamePanel p) {
 		panel = p;
 
-		Random random = new Random();
-		x = random.nextInt (panel.getWidth() - WIDTH);
-		y = YPOS;
-
 		time = 0;				// range is 0 to 70
-		timeChange = 1;				// how to increment time in game loop
+		timeChange = 10;				// how to increment time in game loop
 
-		spriteImage = ImageManager.loadBufferedImage("images/Butterfly.png");
+		spriteImage = ImageManager.loadBufferedImage("images/bomb/bomb.png");
 		copy = ImageManager.copyImage(spriteImage);		
 							//  make a copy of the original image
-
+		active = true;
 	}
 
+	public void setXY(int x, int y){
+		this.x = x;
+		this.y = y;
+	}
 
   	public void eraseImageParts(BufferedImage im, int interval) {
 
@@ -90,11 +91,18 @@ public class DisintegrateFX implements ImageFX {
 
 
 	public void update() {				// modify time
-	
+		active = true;
 		time = time + timeChange;
 
-		if (time > 70)			
+		if (time > 70){
 			time = 0;
+			active = false;
+		}			
+			
+	}
+
+	public boolean isActive(){
+		return active;
 	}
 
 }
