@@ -1,8 +1,0 @@
-I left off trying to figure out how to keep track of the scoring and update the analytic at the same time
-
-    may have to remove anayltic class and do score keeping in game panel and write it to screen using drawstring
-
-After completing the scoring, insert sound effects.
-
-
-Try to get at least one effect in   

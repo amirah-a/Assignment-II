@@ -1,5 +1,4 @@
 import javax.swing.JPanel;
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 
 import java.awt.Image;import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -24,13 +23,13 @@ public class GamePanel extends JPanel {
 	public static ArrayList <Potion> potions;
 	private Potion tempP;
 	private Image[] lives;
-	private Image life;
 	private int maxLives = 4;
 
 	private DisintegrateFX bombFX;
 	private BrightnessFX goldFX;
+	private GrayScaleFX bgFX;
 
-	private boolean bright, disintegrate;
+	private boolean bright, disintegrate, gray;
 
 	private int currLife;
 
@@ -51,7 +50,6 @@ public class GamePanel extends JPanel {
 		potions = new ArrayList<Potion>();
 		lives = new Image[5];
 		tempP = null;
-		life = null;
 
 		currLife = maxLives;
 
@@ -72,25 +70,27 @@ public class GamePanel extends JPanel {
 		int count = 100;
 		for (int i=0; i<NUM_BOMBS; i++){
 			bombs[i] = new Bomb(this, count, 10, player);
-			count+=50;
+			count+=200;
 		}
 			
 		count = 150;
 		for (int i=0; i<NUM_GOLD; i++){
 			gold[i] = new Gold(this, count+100, 20, player);
-
+			count += 150;
 		}
 		for(int j=0; j<5; j++){
 			lives[j] = ImageManager.loadImage("images/lives/heart" + j +".png");
 		}
 		score = 0;
-		life = lives[maxLives];
 
 		goldFX = new BrightnessFX(this);
 		bright = false;
 
 		bombFX = new DisintegrateFX(this);
 		disintegrate = false;
+
+		bgFX = new GrayScaleFX(this);
+		gray = false;
 	}
 
 	public void movePlayer (int direction) {
@@ -150,7 +150,12 @@ public class GamePanel extends JPanel {
 
 		bombFX.update();
 		if(!bombFX.isActive())
-			disintegrate = false; 
+			disintegrate = false;
+		
+		if (gray)
+			bgFX.update();
+		if(!bgFX.isActive())
+			gray = false;
 
 		for(int i=0; i<potions.size(); i++){
 			tempP = potions.get(i);
@@ -169,16 +174,26 @@ public class GamePanel extends JPanel {
 			bombs[x].move();
 			
 			if(player.collidesWithBomb(bombs[x])){
+				gray = true;
+				score -= 50;
 
-				if (currLife  <= 1){
-					soundManager.playClip("over", false);
+				if(currLife > 0)
+					currLife--;
+				
+				if (currLife  == 0){
 					gameThread.setIsRunning(false);
 				}
+
+				if (score < 0){
+					score = 0;
+					gameThread.setIsRunning(false);
+				}
+					
 				soundManager.playClip("explosion", false);
 				bombs[x].setLocation();
 				bombs[x].increaseDY();
-				if(currLife > 0)
-					currLife--;
+				
+
 			}
 
 
@@ -189,7 +204,8 @@ public class GamePanel extends JPanel {
 
 					disintegrate = true;
 					bombFX.setXY(potions.get(j).getX(), potions.get(j).getY());
-					
+					score += 5;
+
 					bombs[x].setLocation();
 				}
 			}
@@ -204,7 +220,7 @@ public class GamePanel extends JPanel {
 				goldFX.setXY(gold[x].getX(), gold[x].getY());
 				
 				gold[x].setLocation();
-				score = score + 10;
+				score = score + 50;
 			}
 		}
 
@@ -218,8 +234,12 @@ public class GamePanel extends JPanel {
 		imageContext.setColor(Color.WHITE);
 		player.draw(imageContext);
 
+
+
 		imageContext.drawImage(backgroundImage, 0, 0, null);	// draw the background image		
-		
+		if (gray)
+			bgFX.draw(imageContext);
+			
 		// draw sprites, or update image animation/effects here
 		player.draw(imageContext);
 
@@ -266,6 +286,8 @@ public class GamePanel extends JPanel {
 
 		Graphics2D imageContext = (Graphics2D) image.getGraphics();
 		
+		soundManager.stopClip("background");
+		soundManager.playClip("over", false);
 		imageContext.drawImage(backgroundImage, 0, 0 , null);
 		Font f = new Font ("Roboto", Font.BOLD, 48);
       	imageContext.setFont (f);

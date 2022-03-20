@@ -27,7 +27,7 @@ public class BrightnessFX implements ImageFX {
 		panel = p;
 
 		brightness = 0;				// range is -255 to 255; negative values darken the
-							// image and positive values brighten the image
+									// image and positive values brighten the image
  
 		brightnessChange = 5;			// increase of brightness in each update
 
